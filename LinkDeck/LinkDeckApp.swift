@@ -1,17 +1,25 @@
-//
-//  LinkDeckApp.swift
-//  LinkDeck
-//
-//  Created by 김예나 on 5/24/26.
-//
-
 import SwiftUI
+import FirebaseCore
 
 @main
 struct LinkDeckApp: App {
+    @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var categoryViewModel = CategoryViewModel()
+
+    init() {
+        FirebaseApp.configure()
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if authViewModel.currentUser != nil {
+                MainTabView()
+                    .environmentObject(authViewModel)
+                    .environmentObject(categoryViewModel)
+            } else {
+                LoginView()
+                    .environmentObject(authViewModel)
+            }
         }
     }
 }
