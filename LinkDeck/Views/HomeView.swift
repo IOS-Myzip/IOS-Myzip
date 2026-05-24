@@ -64,7 +64,10 @@ struct HomeView: View {
                 }
                 .environmentObject(categoryViewModel)
             }
-            .task { await viewModel.fetchLinks() }
+            .task {
+                await viewModel.fetchLinks()
+                await categoryViewModel.fetch()
+            }
         }
     }
 

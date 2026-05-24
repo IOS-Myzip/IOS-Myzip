@@ -53,5 +53,6 @@ struct CategoryManageView: View {
         .navigationTitle("카테고리 관리")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { EditButton() }
+        .task { await categoryViewModel.fetch() }
     }
 }
