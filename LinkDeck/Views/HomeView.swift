@@ -161,16 +161,16 @@ struct HomeView: View {
                         }
                         .tint(Color.appTeal)
                     }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive) {
+                            Task { await viewModel.deleteLink(link) }
+                        } label: {
+                            Label("삭제", systemImage: "trash")
+                        }
+                    }
                     .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
-            }
-            .onDelete { indexSet in
-                Task {
-                    for i in indexSet {
-                        await viewModel.deleteLink(sortedLinks[i])
-                    }
-                }
             }
         }
         .listStyle(.plain)

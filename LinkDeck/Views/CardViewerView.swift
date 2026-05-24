@@ -5,6 +5,7 @@ struct CardViewerView: View {
     @ObservedObject var viewModel: LibraryViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var currentPage = 0
+    @State private var showDeleteAlert = false
 
     var body: some View {
         ZStack {
@@ -47,9 +48,23 @@ struct CardViewerView: View {
 
             Spacer()
 
-            // 저장은 이미 자동으로 됨
-            Button {} label: {
-                Text("저장").font(.subheadline).foregroundColor(Color.appTeal)
+            Button {
+                showDeleteAlert = true
+            } label: {
+                Image(systemName: "trash")
+                    .font(.subheadline)
+                    .foregroundColor(.red.opacity(0.75))
+            }
+            .alert("링크 삭제", isPresented: $showDeleteAlert) {
+                Button("삭제", role: .destructive) {
+                    Task {
+                        await viewModel.deleteLink(link)
+                        dismiss()
+                    }
+                }
+                Button("취소", role: .cancel) {}
+            } message: {
+                Text("이 링크를 삭제할까요?")
             }
         }
         .padding(.horizontal, 20)
