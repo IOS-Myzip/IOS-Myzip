@@ -226,7 +226,7 @@ struct MainCardView: View {
 
                 HStack {
                     Spacer()
-                    Text("→ 다음: AI 인사이트 보기")
+                    Text("→ 다음 카드")
                         .font(.caption).foregroundColor(Color.appTeal)
                 }
             }
@@ -243,18 +243,17 @@ struct InsightCardView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 6) {
-                    Text("✦").foregroundColor(Color.appTeal)
-                    Text("AI 인사이트").font(.subheadline.bold())
+                    Image(systemName: "lightbulb.fill")
+                        .foregroundColor(Color.appTeal)
+                        .font(.subheadline)
+                    Text("인사이트").font(.subheadline.bold())
                 }
                 .padding(.horizontal, 16).padding(.vertical, 11)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(LinearGradient(
-                    colors: [Color.appTeal.opacity(0.12), Color.purple.opacity(0.07)],
-                    startPoint: .leading, endPoint: .trailing
-                ))
+                .background(Color.appTeal.opacity(0.08))
                 .cornerRadius(12)
 
-                Text("이 콘텐츠가 당신에게 중요한 이유")
+                Text("한 줄 요약")
                     .font(.footnote.bold()).foregroundColor(.secondary)
 
                 Text(link.insight)

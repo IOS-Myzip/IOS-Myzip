@@ -12,7 +12,6 @@ struct AddLinkView: View {
     @State private var isAddingCategory = false
     @State private var newCategoryName = ""
 
-    // 메타데이터 미리보기
     @State private var fetchedTitle: String? = nil
     @State private var fetchedSource: String? = nil
     @State private var isFetchingPreview = false
@@ -33,7 +32,6 @@ struct AddLinkView: View {
                             .font(.title3.bold())
                             .padding(.horizontal, 20)
 
-                        // URL 입력
                         VStack(alignment: .leading, spacing: 8) {
                             Label("URL", systemImage: "link")
                                 .font(.caption.bold()).foregroundColor(.secondary)
@@ -54,7 +52,6 @@ struct AddLinkView: View {
                                     .padding(.horizontal, 20)
                             }
 
-                            // 실시간 미리보기
                             if isFetchingPreview {
                                 HStack(spacing: 6) {
                                     ProgressView().scaleEffect(0.75)
@@ -74,7 +71,6 @@ struct AddLinkView: View {
                             }
                         }
 
-                        // 카테고리 선택
                         VStack(alignment: .leading, spacing: 10) {
                             HStack(spacing: 6) {
                                 Label("카테고리", systemImage: "tag.fill")
@@ -107,7 +103,6 @@ struct AddLinkView: View {
                                         .buttonStyle(.plain)
                                     }
 
-                                    // 새 카테고리 인라인 추가
                                     if isAddingCategory {
                                         HStack(spacing: 4) {
                                             TextField("카테고리명", text: $newCategoryName)
@@ -155,7 +150,6 @@ struct AddLinkView: View {
                             }
                         }
 
-                        // 메모
                         VStack(alignment: .leading, spacing: 8) {
                             Label("메모 (선택)", systemImage: "note.text")
                                 .font(.caption.bold()).foregroundColor(.secondary)
@@ -212,7 +206,6 @@ struct AddLinkView: View {
             }
         }
         .onChange(of: url) { newValue in
-            // URL 바뀔 때마다 이전 fetch 취소하고 새로 시작
             fetchTask?.cancel()
             fetchedTitle = nil
             fetchedSource = nil
@@ -224,7 +217,6 @@ struct AddLinkView: View {
 
             isFetchingPreview = true
             fetchTask = Task {
-                // 0.7초 debounce (타이핑 멈출 때까지 기다림)
                 try? await Task.sleep(nanoseconds: 700_000_000)
                 guard !Task.isCancelled else { return }
 

@@ -16,8 +16,6 @@ struct LinkItem: Identifiable, Codable {
     var insight: String
     var createdAt: Timestamp
 
-    // URL 보고 카드 만드는 메서드
-    // fetchedTitle/fetchedSource: LPMetadata에서 긁어온 실제 값 (없으면 더미 사용)
     static func create(userId: String, url: String, memo: String, category: String,
                        fetchedTitle: String? = nil, fetchedSource: String? = nil) -> LinkItem {
         let lower = url.lowercased()
@@ -81,7 +79,6 @@ struct LinkItem: Identifiable, Codable {
             insight = "테크 트렌드를 꾸준히 파악하는 것은 개발자 경쟁력의 핵심입니다. 아티클의 핵심 개념을 정리하고 현재 프로젝트에 적용할 수 있는 부분을 찾아보세요."
         }
 
-        // 실제로 fetch된 값 있으면 우선 사용
         let finalTitle = (fetchedTitle != nil && !fetchedTitle!.isEmpty) ? fetchedTitle! : title
         let finalSource = (fetchedSource != nil && !fetchedSource!.isEmpty) ? fetchedSource! : source
 
