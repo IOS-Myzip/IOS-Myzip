@@ -76,9 +76,19 @@ struct AddLinkView: View {
 
                         // 카테고리 선택
                         VStack(alignment: .leading, spacing: 10) {
-                            Label("카테고리", systemImage: "tag.fill")
-                                .font(.caption.bold()).foregroundColor(.secondary)
-                                .padding(.horizontal, 20)
+                            HStack(spacing: 6) {
+                                Label("카테고리", systemImage: "tag.fill")
+                                    .font(.caption.bold()).foregroundColor(.secondary)
+                                if !selectedCategory.isEmpty {
+                                    Text(selectedCategory)
+                                        .font(.caption.bold())
+                                        .foregroundColor(Color.appTeal)
+                                        .padding(.horizontal, 8).padding(.vertical, 3)
+                                        .background(Color.appTeal.opacity(0.12))
+                                        .cornerRadius(8)
+                                }
+                            }
+                            .padding(.horizontal, 20)
 
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 8) {
