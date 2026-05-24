@@ -8,6 +8,15 @@ struct HomeView: View {
 
     @State private var showAddLink = false
     @State private var selectedLink: LinkItem? = nil
+    @State private var sortNewest = true
+
+    var sortedLinks: [LinkItem] {
+        viewModel.filteredLinks.sorted {
+            sortNewest
+                ? $0.createdAt.dateValue() > $1.createdAt.dateValue()
+                : $0.createdAt.dateValue() < $1.createdAt.dateValue()
+        }
+    }
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -20,7 +29,7 @@ struct HomeView: View {
 
                 if viewModel.isLoading {
                     ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if viewModel.filteredLinks.isEmpty {
+                } else if sortedLinks.isEmpty {
                     emptyView
                 } else {
                     linkList
@@ -87,26 +96,44 @@ struct HomeView: View {
     }
 
     private var categoryChips: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ChipView(label: "전체", isSelected: viewModel.selectedCategory == nil) {
-                    viewModel.selectedCategory = nil
-                }
-                ForEach(categoryViewModel.categories, id: \.self) { cat in
-                    ChipView(label: cat, isSelected: viewModel.selectedCategory == cat) {
-                        viewModel.selectedCategory = viewModel.selectedCategory == cat ? nil : cat
+        HStack(spacing: 0) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ChipView(label: "전체", isSelected: viewModel.selectedCategory == nil) {
+                        viewModel.selectedCategory = nil
+                    }
+                    ForEach(categoryViewModel.categories, id: \.self) { cat in
+                        ChipView(label: cat, isSelected: viewModel.selectedCategory == cat) {
+                            viewModel.selectedCategory = viewModel.selectedCategory == cat ? nil : cat
+                        }
                     }
                 }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
+
+            Divider().frame(height: 28)
+
+            Button {
+                sortNewest.toggle()
+            } label: {
+                HStack(spacing: 3) {
+                    Image(systemName: sortNewest ? "arrow.down" : "arrow.up")
+                        .font(.caption.bold())
+                    Text(sortNewest ? "최신순" : "오래된순")
+                        .font(.caption.bold())
+                }
+                .foregroundColor(Color.appTeal)
+                .padding(.horizontal, 14)
+            }
+            .buttonStyle(.plain)
         }
         .background(Color(.systemBackground))
     }
 
     private var linkList: some View {
         List {
-            ForEach(viewModel.filteredLinks) { link in
+            ForEach(sortedLinks) { link in
                 LinkRowView(link: link)
                     .contentShape(Rectangle())
                     .onTapGesture { selectedLink = link }
@@ -117,7 +144,7 @@ struct HomeView: View {
             .onDelete { indexSet in
                 Task {
                     for i in indexSet {
-                        await viewModel.deleteLink(viewModel.filteredLinks[i])
+                        await viewModel.deleteLink(sortedLinks[i])
                     }
                 }
             }
