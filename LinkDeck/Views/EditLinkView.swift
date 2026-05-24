@@ -10,12 +10,25 @@ struct EditLinkView: View {
     @State private var memo: String
     @State private var selectedCategory: String
     @State private var isSaving = false
+    @State private var isAddingCategory = false
+    @State private var newCategoryName = ""
 
     init(link: LinkItem, onSave: @escaping (LinkItem) async -> Void) {
         self.link = link
         self.onSave = onSave
         _memo = State(initialValue: link.memo)
         _selectedCategory = State(initialValue: link.category)
+    }
+
+    private func submitNewCategory() {
+        let name = newCategoryName.trimmingCharacters(in: .whitespaces)
+        guard !name.isEmpty else { return }
+        Task {
+            await categoryViewModel.addCategory(name)
+            selectedCategory = name
+        }
+        newCategoryName = ""
+        isAddingCategory = false
     }
 
     var body: some View {
@@ -67,6 +80,43 @@ struct EditLinkView: View {
                                                 .padding(.horizontal, 16).padding(.vertical, 9)
                                                 .background(selectedCategory == cat ? Color.appTeal : Color(.systemGray6))
                                                 .foregroundColor(selectedCategory == cat ? .white : .secondary)
+                                                .cornerRadius(20)
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+
+                                    if isAddingCategory {
+                                        HStack(spacing: 4) {
+                                            TextField("카테고리명", text: $newCategoryName)
+                                                .font(.subheadline)
+                                                .frame(width: 90)
+                                                .onSubmit { submitNewCategory() }
+                                            Button { submitNewCategory() } label: {
+                                                Image(systemName: "checkmark")
+                                                    .font(.caption.bold())
+                                                    .foregroundColor(Color.appTeal)
+                                            }
+                                            Button {
+                                                isAddingCategory = false
+                                                newCategoryName = ""
+                                            } label: {
+                                                Image(systemName: "xmark")
+                                                    .font(.caption.bold())
+                                                    .foregroundColor(.secondary)
+                                            }
+                                        }
+                                        .padding(.horizontal, 12).padding(.vertical, 9)
+                                        .background(Color(.systemGray6))
+                                        .cornerRadius(20)
+                                    } else {
+                                        Button {
+                                            isAddingCategory = true
+                                        } label: {
+                                            Image(systemName: "plus")
+                                                .font(.subheadline.bold())
+                                                .foregroundColor(Color.appTeal)
+                                                .frame(width: 36, height: 36)
+                                                .background(Color.appTeal.opacity(0.1))
                                                 .cornerRadius(20)
                                         }
                                         .buttonStyle(.plain)

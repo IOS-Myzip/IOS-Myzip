@@ -4,8 +4,10 @@ struct CardViewerView: View {
     let link: LinkItem
     @ObservedObject var viewModel: LibraryViewModel
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var categoryViewModel: CategoryViewModel
     @State private var currentPage = 0
     @State private var showDeleteAlert = false
+    @State private var showEditSheet = false
 
     var body: some View {
         ZStack {
@@ -20,6 +22,12 @@ struct CardViewerView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .onChange(of: currentPage) { _, page in
                     if page == 2 { Task { await viewModel.markAsRead(link) } }
+                }
+                .sheet(isPresented: $showEditSheet) {
+                    EditLinkView(link: link) { updated in
+                        await viewModel.updateLink(updated)
+                    }
+                    .environmentObject(categoryViewModel)
                 }
             }
         }
@@ -48,12 +56,28 @@ struct CardViewerView: View {
 
             Spacer()
 
-            Button {
-                showDeleteAlert = true
-            } label: {
-                Image(systemName: "trash")
-                    .font(.subheadline)
-                    .foregroundColor(.red.opacity(0.75))
+            HStack(spacing: 10) {
+                Button {
+                    showEditSheet = true
+                } label: {
+                    Image(systemName: "pencil")
+                        .font(.caption.bold())
+                        .foregroundColor(Color.appTeal)
+                        .frame(width: 32, height: 32)
+                        .background(Color.appTeal.opacity(0.12))
+                        .clipShape(Circle())
+                }
+
+                Button {
+                    showDeleteAlert = true
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.caption.bold())
+                        .foregroundColor(.red)
+                        .frame(width: 32, height: 32)
+                        .background(Color.red.opacity(0.1))
+                        .clipShape(Circle())
+                }
             }
             .alert("링크 삭제", isPresented: $showDeleteAlert) {
                 Button("삭제", role: .destructive) {
@@ -286,4 +310,5 @@ struct InsightCardView: View {
         link: LinkItem.create(userId: "preview", url: "https://github.com/test", memo: "테스트", category: "개발"),
         viewModel: LibraryViewModel()
     )
+    .environmentObject(CategoryViewModel())
 }
