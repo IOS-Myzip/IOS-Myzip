@@ -5,6 +5,7 @@ import FirebaseCore
 struct LinkDeckApp: App {
     @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var categoryViewModel = CategoryViewModel()
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
     init() {
         FirebaseApp.configure()
@@ -12,7 +13,11 @@ struct LinkDeckApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if authViewModel.currentUser != nil {
+            if !hasSeenOnboarding {
+                OnboardingView()
+                    .environmentObject(authViewModel)
+                    .environmentObject(categoryViewModel)
+            } else if authViewModel.currentUser != nil {
                 MainTabView()
                     .environmentObject(authViewModel)
                     .environmentObject(categoryViewModel)
