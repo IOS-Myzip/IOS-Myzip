@@ -23,6 +23,14 @@ class LinkService {
         try await db.collection("links").document(id).delete()
     }
 
+    func updateLink(_ link: LinkItem) async throws {
+        guard let id = link.id else { return }
+        try await db.collection("links").document(id).updateData([
+            "category": link.category,
+            "memo": link.memo
+        ])
+    }
+
     func markAsRead(_ link: LinkItem) async throws {
         guard let id = link.id else { return }
         try await db.collection("links").document(id).updateData(["isRead": true])

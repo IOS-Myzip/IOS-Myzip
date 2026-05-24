@@ -60,6 +60,17 @@ class LibraryViewModel: ObservableObject {
         }
     }
 
+    func updateLink(_ link: LinkItem) async {
+        do {
+            try await LinkService.shared.updateLink(link)
+            if let idx = links.firstIndex(where: { $0.id == link.id }) {
+                links[idx] = link
+            }
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
     func markAsRead(_ link: LinkItem) async {
         do {
             try await LinkService.shared.markAsRead(link)

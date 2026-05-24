@@ -8,10 +8,13 @@ struct HomeView: View {
 
     @State private var showAddLink = false
     @State private var selectedLink: LinkItem? = nil
+    @State private var editingLink: LinkItem? = nil
     @State private var sortNewest = true
+    @State private var showUnreadOnly = false
 
     var sortedLinks: [LinkItem] {
-        viewModel.filteredLinks.sorted {
+        let base = showUnreadOnly ? viewModel.filteredLinks.filter { !$0.isRead } : viewModel.filteredLinks
+        return base.sorted {
             sortNewest
                 ? $0.createdAt.dateValue() > $1.createdAt.dateValue()
                 : $0.createdAt.dateValue() < $1.createdAt.dateValue()
@@ -54,6 +57,12 @@ struct HomeView: View {
             }
             .fullScreenCover(item: $selectedLink) { link in
                 CardViewerView(link: link, viewModel: viewModel)
+            }
+            .sheet(item: $editingLink) { link in
+                EditLinkView(link: link) { updated in
+                    await viewModel.updateLink(updated)
+                }
+                .environmentObject(categoryViewModel)
             }
             .task { await viewModel.fetchLinks() }
         }
@@ -100,12 +109,18 @@ struct HomeView: View {
         HStack(spacing: 0) {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    ChipView(label: "전체", isSelected: viewModel.selectedCategory == nil) {
+                    ChipView(label: "전체", isSelected: viewModel.selectedCategory == nil && !showUnreadOnly) {
+                        viewModel.selectedCategory = nil
+                        showUnreadOnly = false
+                    }
+                    ChipView(label: "미읽음", isSelected: showUnreadOnly) {
+                        showUnreadOnly.toggle()
                         viewModel.selectedCategory = nil
                     }
                     ForEach(categoryViewModel.categories, id: \.self) { cat in
                         ChipView(label: cat, isSelected: viewModel.selectedCategory == cat) {
                             viewModel.selectedCategory = viewModel.selectedCategory == cat ? nil : cat
+                            showUnreadOnly = false
                         }
                     }
                 }
@@ -138,6 +153,14 @@ struct HomeView: View {
                 LinkRowView(link: link)
                     .contentShape(Rectangle())
                     .onTapGesture { selectedLink = link }
+                    .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                        Button {
+                            editingLink = link
+                        } label: {
+                            Label("수정", systemImage: "pencil")
+                        }
+                        .tint(Color.appTeal)
+                    }
                     .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)

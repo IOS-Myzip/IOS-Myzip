@@ -1,14 +1,22 @@
 import SwiftUI
 
-struct AddLinkView: View {
+struct EditLinkView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var categoryViewModel: CategoryViewModel
-    @ObservedObject var viewModel: LibraryViewModel
 
-    @State private var url = ""
-    @State private var memo = ""
-    @State private var selectedCategory = ""
+    let link: LinkItem
+    var onSave: (LinkItem) async -> Void
+
+    @State private var memo: String
+    @State private var selectedCategory: String
     @State private var isSaving = false
+
+    init(link: LinkItem, onSave: @escaping (LinkItem) async -> Void) {
+        self.link = link
+        self.onSave = onSave
+        _memo = State(initialValue: link.memo)
+        _selectedCategory = State(initialValue: link.category)
+    }
 
     var body: some View {
         NavigationStack {
@@ -21,33 +29,27 @@ struct AddLinkView: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
-                        Text("링크 추가")
+                        Text("링크 수정")
                             .font(.title3.bold())
                             .padding(.horizontal, 20)
 
-                        // URL 입력
+                        // URL (수정 불가)
                         VStack(alignment: .leading, spacing: 8) {
                             Label("URL", systemImage: "link")
                                 .font(.caption.bold()).foregroundColor(.secondary)
                                 .padding(.horizontal, 20)
-                            TextField("https://", text: $url)
-                                .textContentType(.URL)
-                                .keyboardType(.URL)
-                                .autocapitalization(.none)
-                                .autocorrectionDisabled()
+                            Text(link.url)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .lineLimit(2)
                                 .padding(14)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(Color(.systemGray6))
                                 .cornerRadius(12)
                                 .padding(.horizontal, 20)
-
-                            if !url.isEmpty && !isValidURL(url) {
-                                Text("올바른 URL을 입력해주세요 (http:// 또는 https://)")
-                                    .font(.caption).foregroundColor(.red.opacity(0.7))
-                                    .padding(.horizontal, 20)
-                            }
                         }
 
-                        // 카테고리 선택
+                        // 카테고리
                         VStack(alignment: .leading, spacing: 10) {
                             Label("카테고리", systemImage: "tag.fill")
                                 .font(.caption.bold()).foregroundColor(.secondary)
@@ -72,20 +74,14 @@ struct AddLinkView: View {
                                 }
                                 .padding(.horizontal, 20)
                             }
-
-                            if selectedCategory.isEmpty {
-                                Text("카테고리를 선택해주세요")
-                                    .font(.caption).foregroundColor(.red.opacity(0.7))
-                                    .padding(.horizontal, 20)
-                            }
                         }
 
                         // 메모
                         VStack(alignment: .leading, spacing: 8) {
-                            Label("메모 (선택)", systemImage: "note.text")
+                            Label("메모", systemImage: "note.text")
                                 .font(.caption.bold()).foregroundColor(.secondary)
                                 .padding(.horizontal, 20)
-                            TextField("이 링크에 대한 메모를 입력하세요", text: $memo, axis: .vertical)
+                            TextField("메모를 입력하세요", text: $memo, axis: .vertical)
                                 .lineLimit(3...5)
                                 .padding(14)
                                 .background(Color(.systemGray6))
@@ -100,22 +96,25 @@ struct AddLinkView: View {
                     Button {
                         Task {
                             isSaving = true
-                            await viewModel.addLink(url: url, memo: memo, category: selectedCategory)
+                            var updated = link
+                            updated.category = selectedCategory
+                            updated.memo = memo
+                            await onSave(updated)
                             isSaving = false
                             dismiss()
                         }
                     } label: {
                         HStack(spacing: 8) {
                             if isSaving { ProgressView().tint(.white) }
-                            Text(isSaving ? "저장 중..." : "저장하기").fontWeight(.semibold)
+                            Text(isSaving ? "저장 중..." : "수정 완료").fontWeight(.semibold)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
-                        .background(canSave ? Color.appTeal : Color.appTeal.opacity(0.35))
+                        .background(Color.appTeal)
                         .foregroundColor(.white)
                         .cornerRadius(14)
                     }
-                    .disabled(!canSave || isSaving)
+                    .disabled(isSaving)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 32).padding(.top, 12)
                 }
@@ -127,22 +126,5 @@ struct AddLinkView: View {
                 }
             }
         }
-        .onAppear {
-            if selectedCategory.isEmpty, let first = categoryViewModel.categories.first {
-                selectedCategory = first
-            }
-        }
-    }
-
-    private var canSave: Bool {
-        isValidURL(url) && !selectedCategory.isEmpty
-    }
-
-    private func isValidURL(_ string: String) -> Bool {
-        guard let url = URL(string: string.trimmingCharacters(in: .whitespaces)),
-              let scheme = url.scheme,
-              ["http", "https"].contains(scheme),
-              url.host != nil else { return false }
-        return true
     }
 }
