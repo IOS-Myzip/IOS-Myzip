@@ -19,43 +19,44 @@ struct HomeView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            Color(.systemGroupedBackground).ignoresSafeArea()
+        NavigationStack {
+            ZStack(alignment: .bottomTrailing) {
+                Color(.systemGroupedBackground).ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                navBar
-                searchBar
-                categoryChips
+                VStack(spacing: 0) {
+                    navBar
+                    searchBar
+                    categoryChips
 
-                if viewModel.isLoading {
-                    ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if sortedLinks.isEmpty {
-                    emptyView
-                } else {
-                    linkList
+                    if viewModel.isLoading {
+                        ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if sortedLinks.isEmpty {
+                        emptyView
+                    } else {
+                        linkList
+                    }
                 }
-            }
 
-            // 링크 추가 버튼
-            Button { showAddLink = true } label: {
-                Image(systemName: "plus")
-                    .font(.title2.bold())
-                    .foregroundColor(.white)
-                    .frame(width: 56, height: 56)
-                    .background(Color.appTeal)
-                    .clipShape(Circle())
-                    .shadow(color: Color.appTeal.opacity(0.4), radius: 10, x: 0, y: 4)
+                Button { showAddLink = true } label: {
+                    Image(systemName: "plus")
+                        .font(.title2.bold())
+                        .foregroundColor(.white)
+                        .frame(width: 56, height: 56)
+                        .background(Color.appTeal)
+                        .clipShape(Circle())
+                        .shadow(color: Color.appTeal.opacity(0.4), radius: 10, x: 0, y: 4)
+                }
+                .padding(.trailing, 20)
+                .padding(.bottom, 20)
             }
-            .padding(.trailing, 20)
-            .padding(.bottom, 20)
+            .sheet(isPresented: $showAddLink) {
+                AddLinkView(viewModel: viewModel)
+            }
+            .fullScreenCover(item: $selectedLink) { link in
+                CardViewerView(link: link, viewModel: viewModel)
+            }
+            .task { await viewModel.fetchLinks() }
         }
-        .sheet(isPresented: $showAddLink) {
-            AddLinkView(viewModel: viewModel)
-        }
-        .fullScreenCover(item: $selectedLink) { link in
-            CardViewerView(link: link, viewModel: viewModel)
-        }
-        .task { await viewModel.fetchLinks() }
     }
 
     private var navBar: some View {
@@ -68,10 +69,10 @@ struct HomeView: View {
                     .foregroundColor(.secondary)
             }
             Spacer()
-            Button {
-                authViewModel.signOut()
+            NavigationLink {
+                SettingsView()
             } label: {
-                Image(systemName: "rectangle.portrait.and.arrow.right")
+                Image(systemName: "gearshape.fill")
                     .foregroundColor(.secondary)
             }
         }

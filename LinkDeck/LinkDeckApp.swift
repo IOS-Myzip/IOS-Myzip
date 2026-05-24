@@ -18,7 +18,7 @@ struct LinkDeckApp: App {
                     .environmentObject(authViewModel)
                     .environmentObject(categoryViewModel)
             } else if authViewModel.currentUser != nil {
-                MainTabView()
+                HomeView()
                     .environmentObject(authViewModel)
                     .environmentObject(categoryViewModel)
             } else {
