@@ -8,10 +8,12 @@ class CategoryViewModel: ObservableObject {
     @Published var categories: [String] = ["트렌드", "개발", "테크"]
 
     func fetch() async {
-        guard let userId = AuthService.shared.currentUser?.uid else { return }
+        guard let uid = AuthService.shared.currentUser?.uid else { return }
         do {
-            categories = try await CategoryService.shared.fetchCategories(userId: userId)
-        } catch {}
+            categories = try await CategoryService.shared.fetchCategories(userId: uid)
+        } catch {
+            print("카테고리 로드 실패: \(error)")
+        }
     }
 
     func addCategory(_ name: String) async {
@@ -27,7 +29,7 @@ class CategoryViewModel: ObservableObject {
     }
 
     private func save() async {
-        guard let userId = AuthService.shared.currentUser?.uid else { return }
-        try? await CategoryService.shared.saveCategories(categories, userId: userId)
+        guard let uid = AuthService.shared.currentUser?.uid else { return }
+        try? await CategoryService.shared.saveCategories(categories, userId: uid)
     }
 }

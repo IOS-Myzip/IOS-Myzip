@@ -4,44 +4,42 @@ import FirebaseCore
 struct ExploreView: View {
     @EnvironmentObject var categoryViewModel: CategoryViewModel
     @StateObject private var viewModel = LibraryViewModel()
+
     @State private var sortNewest = true
     @State private var selectedCategory: String? = nil
     @State private var selectedLink: LinkItem? = nil
 
-    var sortedLinks: [LinkItem] {
-        var links = selectedCategory != nil
+    var sorted: [LinkItem] {
+        var list = selectedCategory != nil
             ? viewModel.links.filter { $0.category == selectedCategory! }
             : viewModel.links
-        links.sort {
+        list.sort {
             sortNewest
                 ? $0.createdAt.dateValue() > $1.createdAt.dateValue()
                 : $0.createdAt.dateValue() < $1.createdAt.dateValue()
         }
-        return links
+        return list
     }
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 filterBar
-
                 Divider()
 
                 if viewModel.isLoading {
                     ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if sortedLinks.isEmpty {
+                } else if sorted.isEmpty {
                     VStack(spacing: 14) {
                         Image(systemName: "tray")
-                            .font(.system(size: 44))
-                            .foregroundColor(.secondary.opacity(0.4))
+                            .font(.system(size: 44)).foregroundColor(.secondary.opacity(0.4))
                         Text("해당하는 링크가 없습니다")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .font(.subheadline).foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     List {
-                        ForEach(sortedLinks) { link in
+                        ForEach(sorted) { link in
                             LinkRowView(link: link)
                                 .contentShape(Rectangle())
                                 .onTapGesture { selectedLink = link }
@@ -64,8 +62,6 @@ struct ExploreView: View {
         }
     }
 
-    // MARK: - Filter Bar
-
     private var filterBar: some View {
         HStack(spacing: 0) {
             ScrollView(.horizontal, showsIndicators: false) {
@@ -79,13 +75,11 @@ struct ExploreView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 16).padding(.vertical, 12)
             }
 
             Divider().frame(height: 32)
 
-            // 정렬 토글
             Button {
                 sortNewest.toggle()
             } label: {
@@ -108,8 +102,7 @@ struct ExploreView: View {
         Button(action: action) {
             Text(label)
                 .font(.subheadline)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 7)
+                .padding(.horizontal, 14).padding(.vertical, 7)
                 .background(isSelected ? Color.appTeal : Color(.systemGray6))
                 .foregroundColor(isSelected ? .white : .secondary)
                 .cornerRadius(20)

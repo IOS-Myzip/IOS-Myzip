@@ -9,12 +9,9 @@ struct CategoryManageView: View {
         List {
             Section {
                 ForEach(categoryViewModel.categories, id: \.self) { cat in
-                    HStack {
-                        Circle()
-                            .fill(Color.appTeal.opacity(0.2))
-                            .frame(width: 8, height: 8)
-                        Text(cat)
-                            .font(.subheadline)
+                    HStack(spacing: 10) {
+                        Circle().fill(Color.appTeal.opacity(0.2)).frame(width: 8, height: 8)
+                        Text(cat).font(.subheadline)
                     }
                     .padding(.vertical, 2)
                 }
@@ -24,8 +21,7 @@ struct CategoryManageView: View {
             } header: {
                 Text("카테고리 목록")
             } footer: {
-                Text("왼쪽으로 스와이프하면 삭제할 수 있습니다.")
-                    .font(.caption)
+                Text("스와이프해서 삭제할 수 있어요")
             }
 
             Section {
@@ -56,8 +52,6 @@ struct CategoryManageView: View {
         }
         .navigationTitle("카테고리 관리")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            EditButton()
-        }
+        .toolbar { EditButton() }
     }
 }

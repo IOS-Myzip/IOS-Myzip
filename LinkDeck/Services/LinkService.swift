@@ -15,9 +15,7 @@ class LinkService {
             .order(by: "createdAt", descending: true)
             .getDocuments()
 
-        return snapshot.documents.compactMap { doc in
-            try? doc.data(as: LinkItem.self)
-        }
+        return snapshot.documents.compactMap { try? $0.data(as: LinkItem.self) }
     }
 
     func deleteLink(_ link: LinkItem) async throws {

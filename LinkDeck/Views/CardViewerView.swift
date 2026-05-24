@@ -9,45 +9,33 @@ struct CardViewerView: View {
     var body: some View {
         ZStack {
             Color(.systemGroupedBackground).ignoresSafeArea()
-
             VStack(spacing: 0) {
                 topBar
-
                 TabView(selection: $currentPage) {
                     CoverCardView(link: link).tag(0)
                     MainCardView(link: link).tag(1)
                     InsightCardView(link: link).tag(2)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
-                .animation(.easeInOut, value: currentPage)
-                .onChange(of: currentPage) { _, newPage in
-                    if newPage == 2 {
-                        Task { await viewModel.markAsRead(link) }
-                    }
+                .onChange(of: currentPage) { _, page in
+                    if page == 2 { Task { await viewModel.markAsRead(link) } }
                 }
             }
         }
     }
 
-    // MARK: - Top Bar
-
     private var topBar: some View {
         HStack {
-            Button {
-                dismiss()
-            } label: {
+            Button { dismiss() } label: {
                 HStack(spacing: 4) {
-                    Image(systemName: "chevron.left")
-                        .font(.subheadline.bold())
-                    Text("뒤로")
-                        .font(.subheadline)
+                    Image(systemName: "chevron.left").font(.subheadline.bold())
+                    Text("뒤로").font(.subheadline)
                 }
                 .foregroundColor(.primary)
             }
 
             Spacer()
 
-            // Page dots
             HStack(spacing: 5) {
                 ForEach(0..<3) { i in
                     Capsule()
@@ -59,12 +47,9 @@ struct CardViewerView: View {
 
             Spacer()
 
-            Button {
-                // 저장 기능 (현재는 Firestore에 자동 저장됨)
-            } label: {
-                Text("저장")
-                    .font(.subheadline)
-                    .foregroundColor(Color.appTeal)
+            // 저장은 이미 자동으로 됨
+            Button {} label: {
+                Text("저장").font(.subheadline).foregroundColor(Color.appTeal)
             }
         }
         .padding(.horizontal, 20)
@@ -74,35 +59,27 @@ struct CardViewerView: View {
     }
 }
 
-// MARK: - Cover Card
-
 struct CoverCardView: View {
     let link: LinkItem
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Large teal card
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.appTeal, Color.appTeal.opacity(0.65)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
+                        .fill(LinearGradient(
+                            colors: [Color.appTeal, Color.appTeal.opacity(0.65)],
+                            startPoint: .topLeading, endPoint: .bottomTrailing
+                        ))
                         .frame(height: 220)
 
                     VStack(spacing: 14) {
-                        Image(systemName: categoryIcon(link.category))
+                        Image(systemName: iconFor(link.category))
                             .font(.system(size: 54))
                             .foregroundColor(.white.opacity(0.9))
-
                         Text(link.source)
                             .font(.caption.bold())
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 5)
+                            .padding(.horizontal, 14).padding(.vertical, 5)
                             .background(.white.opacity(0.25))
                             .foregroundColor(.white)
                             .cornerRadius(20)
@@ -110,28 +87,23 @@ struct CoverCardView: View {
                 }
                 .padding(.horizontal, 20)
 
-                // Title & tags
                 VStack(alignment: .leading, spacing: 12) {
                     Text(link.title)
                         .font(.title3.bold())
-                        .foregroundColor(.primary)
                         .lineSpacing(2)
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 6) {
                             Text("#\(link.category)")
                                 .font(.caption.bold())
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
+                                .padding(.horizontal, 10).padding(.vertical, 5)
                                 .background(Color.appTeal.opacity(0.12))
                                 .foregroundColor(Color.appTeal)
                                 .cornerRadius(8)
-
                             ForEach(link.tags.prefix(2), id: \.self) { tag in
                                 Text("#\(tag)")
                                     .font(.caption)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 5)
+                                    .padding(.horizontal, 10).padding(.vertical, 5)
                                     .background(Color(.systemGray6))
                                     .foregroundColor(.secondary)
                                     .cornerRadius(8)
@@ -141,9 +113,7 @@ struct CoverCardView: View {
 
                     if !link.memo.isEmpty {
                         Text(link.memo)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .italic()
+                            .font(.subheadline).foregroundColor(.secondary).italic()
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -156,15 +126,14 @@ struct CoverCardView: View {
                     Text("스와이프하여 다음 카드")
                     Image(systemName: "arrow.right")
                 }
-                .font(.caption)
-                .foregroundColor(.secondary)
+                .font(.caption).foregroundColor(.secondary)
                 .padding(.bottom, 24)
             }
             .padding(.top, 20)
         }
     }
 
-    private func categoryIcon(_ cat: String) -> String {
+    private func iconFor(_ cat: String) -> String {
         switch cat {
         case "트렌드": return "play.rectangle.fill"
         case "개발": return "chevron.left.forwardslash.chevron.right"
@@ -173,27 +142,22 @@ struct CoverCardView: View {
     }
 }
 
-// MARK: - Main Card
-
 struct MainCardView: View {
     let link: LinkItem
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                // Key message box
                 VStack(alignment: .leading, spacing: 10) {
                     Text("핵심 메시지")
                         .font(.caption.bold())
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 5)
+                        .padding(.horizontal, 12).padding(.vertical, 5)
                         .background(Color.appTeal)
                         .foregroundColor(.white)
                         .cornerRadius(20)
 
                     Text(link.keyMessage)
                         .font(.body.bold())
-                        .foregroundColor(.primary)
                         .lineSpacing(4)
                 }
                 .padding(16)
@@ -201,22 +165,16 @@ struct MainCardView: View {
                 .background(Color.appTeal.opacity(0.07))
                 .cornerRadius(14)
 
-                // Main points
                 VStack(alignment: .leading, spacing: 14) {
                     Text("주요 내용")
-                        .font(.footnote.bold())
-                        .foregroundColor(.secondary)
+                        .font(.footnote.bold()).foregroundColor(.secondary)
 
                     ForEach(link.mainPoints, id: \.self) { point in
                         HStack(alignment: .top, spacing: 10) {
-                            Circle()
-                                .fill(Color.appTeal)
-                                .frame(width: 6, height: 6)
-                                .padding(.top, 7)
+                            Circle().fill(Color.appTeal)
+                                .frame(width: 6, height: 6).padding(.top, 7)
                             Text(point)
-                                .font(.subheadline)
-                                .foregroundColor(.primary)
-                                .lineSpacing(3)
+                                .font(.subheadline).lineSpacing(3)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
@@ -230,19 +188,14 @@ struct MainCardView: View {
                 HStack {
                     Spacer()
                     Text("→ 다음: AI 인사이트 보기")
-                        .font(.caption)
-                        .foregroundColor(Color.appTeal)
+                        .font(.caption).foregroundColor(Color.appTeal)
                 }
-                .padding(.top, 4)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 40)
+            .padding(.top, 20).padding(.bottom, 40)
         }
     }
 }
-
-// MARK: - Insight Card
 
 struct InsightCardView: View {
     let link: LinkItem
@@ -250,48 +203,35 @@ struct InsightCardView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                // AI Insight header
                 HStack(spacing: 6) {
-                    Text("✦")
-                        .foregroundColor(Color.appTeal)
-                    Text("AI 인사이트")
-                        .font(.subheadline.bold())
-                        .foregroundColor(.primary)
+                    Text("✦").foregroundColor(Color.appTeal)
+                    Text("AI 인사이트").font(.subheadline.bold())
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 11)
+                .padding(.horizontal, 16).padding(.vertical, 11)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    LinearGradient(
-                        colors: [Color.appTeal.opacity(0.12), Color.purple.opacity(0.07)],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
+                .background(LinearGradient(
+                    colors: [Color.appTeal.opacity(0.12), Color.purple.opacity(0.07)],
+                    startPoint: .leading, endPoint: .trailing
+                ))
                 .cornerRadius(12)
 
                 Text("이 콘텐츠가 당신에게 중요한 이유")
-                    .font(.footnote.bold())
-                    .foregroundColor(.secondary)
+                    .font(.footnote.bold()).foregroundColor(.secondary)
 
                 Text(link.insight)
-                    .font(.body)
-                    .foregroundColor(.primary)
-                    .lineSpacing(5)
+                    .font(.body).lineSpacing(5)
                     .padding(16)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color(.systemBackground))
                     .cornerRadius(14)
                     .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 2)
 
-                // Tags
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 6) {
                         ForEach(link.tags, id: \.self) { tag in
                             Text("#\(tag)")
                                 .font(.caption)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
+                                .padding(.horizontal, 10).padding(.vertical, 5)
                                 .background(Color(.systemGray6))
                                 .foregroundColor(.secondary)
                                 .cornerRadius(8)
@@ -299,21 +239,16 @@ struct InsightCardView: View {
                     }
                 }
 
-                // Read original
                 VStack(spacing: 10) {
-                    Text("원문 읽기")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    Text("원문 읽기").font(.caption).foregroundColor(.secondary)
                         .frame(maxWidth: .infinity)
-
                     Button {
                         if let url = URL(string: link.url) {
                             UIApplication.shared.open(url)
                         }
                     } label: {
                         HStack(spacing: 6) {
-                            Text("원문 보기")
-                                .fontWeight(.semibold)
+                            Text("원문 보기").fontWeight(.semibold)
                             Image(systemName: "arrow.right")
                         }
                         .frame(maxWidth: .infinity)
@@ -326,15 +261,14 @@ struct InsightCardView: View {
                 .padding(.top, 6)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 40)
+            .padding(.top, 20).padding(.bottom, 40)
         }
     }
 }
 
 #Preview {
     CardViewerView(
-        link: LinkItem.create(userId: "preview", url: "https://github.com/test", memo: "테스트 메모", category: "개발"),
+        link: LinkItem.create(userId: "preview", url: "https://github.com/test", memo: "테스트", category: "개발"),
         viewModel: LibraryViewModel()
     )
 }

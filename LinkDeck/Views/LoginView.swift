@@ -19,7 +19,6 @@ struct LoginView: View {
             VStack(spacing: 32) {
                 Spacer()
 
-                // Logo
                 VStack(spacing: 12) {
                     Image(systemName: "rectangle.stack.fill")
                         .font(.system(size: 64))
@@ -34,7 +33,6 @@ struct LoginView: View {
 
                 Spacer()
 
-                // Form
                 VStack(spacing: 14) {
                     TextField("이메일", text: $email)
                         .textContentType(.emailAddress)
@@ -60,7 +58,6 @@ struct LoginView: View {
                             .font(.caption)
                             .foregroundColor(.red.opacity(0.9))
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal, 4)
                     }
 
                     Button {
@@ -73,9 +70,7 @@ struct LoginView: View {
                         }
                     } label: {
                         HStack(spacing: 8) {
-                            if authViewModel.isLoading {
-                                ProgressView().tint(.indigo)
-                            }
+                            if authViewModel.isLoading { ProgressView().tint(.indigo) }
                             Text(isSignUp ? "회원가입" : "로그인")
                                 .fontWeight(.semibold)
                         }
@@ -102,9 +97,4 @@ struct LoginView: View {
             }
         }
     }
-}
-
-#Preview {
-    LoginView()
-        .environmentObject(AuthViewModel())
 }

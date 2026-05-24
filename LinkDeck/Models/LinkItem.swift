@@ -16,17 +16,19 @@ struct LinkItem: Identifiable, Codable {
     var insight: String
     var createdAt: Timestamp
 
+    // URL 보고 더미 카드 만드는 메서드
+    // TODO: 나중에 실제 AI 분석으로 교체
     static func create(userId: String, url: String, memo: String, category: String) -> LinkItem {
-        let lowercased = url.lowercased()
+        let lower = url.lowercased()
 
-        let title: String
-        let source: String
-        let tags: [String]
-        let keyMessage: String
-        let mainPoints: [String]
-        let insight: String
+        var title = ""
+        var source = ""
+        var tags: [String] = []
+        var keyMessage = ""
+        var mainPoints: [String] = []
+        var insight = ""
 
-        if lowercased.contains("youtube.com") || lowercased.contains("youtu.be") {
+        if lower.contains("youtube.com") || lower.contains("youtu.be") {
             title = "YouTube 트렌드 영상"
             source = "YouTube"
             tags = ["영상", "트렌드", "YouTube"]
@@ -38,7 +40,7 @@ struct LinkItem: Identifiable, Codable {
             ]
             insight = "영상 콘텐츠는 복잡한 개념을 직관적으로 전달하는 데 탁월합니다. 이 트렌드를 업무나 프로젝트에 연결해 새로운 아이디어를 발견해보세요."
 
-        } else if lowercased.contains("github.com") {
+        } else if lower.contains("github.com") {
             title = "GitHub 오픈소스 프로젝트"
             source = "GitHub"
             tags = ["오픈소스", "GitHub", "개발"]
@@ -50,12 +52,8 @@ struct LinkItem: Identifiable, Codable {
             ]
             insight = "오픈소스 프로젝트에 기여하거나 직접 활용하면 실전 개발 역량을 크게 키울 수 있습니다. 먼저 이슈 트래커를 살펴보고 기여할 수 있는 부분을 찾아보세요."
 
-        } else if lowercased.contains("medium.com") || lowercased.contains("velog.io") || lowercased.contains("tistory.com") {
-            let src: String
-            if lowercased.contains("medium.com") { src = "Medium" }
-            else if lowercased.contains("velog.io") { src = "Velog" }
-            else { src = "Tistory" }
-
+        } else if lower.contains("medium.com") || lower.contains("velog.io") || lower.contains("tistory.com") {
+            let src = lower.contains("medium.com") ? "Medium" : (lower.contains("velog.io") ? "Velog" : "Tistory")
             title = "개발 기술 블로그 포스트"
             source = src
             tags = ["블로그", "기술", "개발"]
