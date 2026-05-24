@@ -10,6 +10,12 @@ struct AddLinkView: View {
     @State private var selectedCategory = ""
     @State private var isSaving = false
 
+    // 메타데이터 미리보기
+    @State private var fetchedTitle: String? = nil
+    @State private var fetchedSource: String? = nil
+    @State private var isFetchingPreview = false
+    @State private var fetchTask: Task<Void, Never>? = nil
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -44,6 +50,25 @@ struct AddLinkView: View {
                                 Text("올바른 URL을 입력해주세요 (http:// 또는 https://)")
                                     .font(.caption).foregroundColor(.red.opacity(0.7))
                                     .padding(.horizontal, 20)
+                            }
+
+                            // 실시간 미리보기
+                            if isFetchingPreview {
+                                HStack(spacing: 6) {
+                                    ProgressView().scaleEffect(0.75)
+                                    Text("제목 가져오는 중...")
+                                        .font(.caption).foregroundColor(.secondary)
+                                }
+                                .padding(.horizontal, 20)
+                            } else if let title = fetchedTitle {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.caption).foregroundColor(Color.appTeal)
+                                    Text(title)
+                                        .font(.caption).foregroundColor(.secondary)
+                                        .lineLimit(1)
+                                }
+                                .padding(.horizontal, 20)
                             }
                         }
 
@@ -100,7 +125,11 @@ struct AddLinkView: View {
                     Button {
                         Task {
                             isSaving = true
-                            await viewModel.addLink(url: url, memo: memo, category: selectedCategory)
+                            fetchTask?.cancel()
+                            await viewModel.addLink(
+                                url: url, memo: memo, category: selectedCategory,
+                                fetchedTitle: fetchedTitle, fetchedSource: fetchedSource
+                            )
                             isSaving = false
                             dismiss()
                         }
@@ -130,6 +159,31 @@ struct AddLinkView: View {
         .onAppear {
             if selectedCategory.isEmpty, let first = categoryViewModel.categories.first {
                 selectedCategory = first
+            }
+        }
+        .onChange(of: url) { newValue in
+            // URL 바뀔 때마다 이전 fetch 취소하고 새로 시작
+            fetchTask?.cancel()
+            fetchedTitle = nil
+            fetchedSource = nil
+
+            guard isValidURL(newValue) else {
+                isFetchingPreview = false
+                return
+            }
+
+            isFetchingPreview = true
+            fetchTask = Task {
+                // 0.7초 debounce (타이핑 멈출 때까지 기다림)
+                try? await Task.sleep(nanoseconds: 700_000_000)
+                guard !Task.isCancelled else { return }
+
+                let result = await MetadataService.shared.fetch(urlString: newValue)
+                guard !Task.isCancelled else { return }
+
+                fetchedTitle = result.title
+                fetchedSource = result.source
+                isFetchingPreview = false
             }
         }
     }

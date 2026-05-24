@@ -40,9 +40,13 @@ class LibraryViewModel: ObservableObject {
         isLoading = false
     }
 
-    func addLink(url: String, memo: String, category: String) async {
+    func addLink(url: String, memo: String, category: String,
+                 fetchedTitle: String? = nil, fetchedSource: String? = nil) async {
         guard let uid = AuthService.shared.currentUser?.uid else { return }
-        let newLink = LinkItem.create(userId: uid, url: url, memo: memo, category: category)
+        let newLink = LinkItem.create(
+            userId: uid, url: url, memo: memo, category: category,
+            fetchedTitle: fetchedTitle, fetchedSource: fetchedSource
+        )
         do {
             try await LinkService.shared.addLink(newLink)
             await fetchLinks()

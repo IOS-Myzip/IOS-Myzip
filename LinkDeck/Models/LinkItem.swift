@@ -16,9 +16,10 @@ struct LinkItem: Identifiable, Codable {
     var insight: String
     var createdAt: Timestamp
 
-    // URL 보고 더미 카드 만드는 메서드
-    // TODO: 나중에 실제 AI 분석으로 교체
-    static func create(userId: String, url: String, memo: String, category: String) -> LinkItem {
+    // URL 보고 카드 만드는 메서드
+    // fetchedTitle/fetchedSource: LPMetadata에서 긁어온 실제 값 (없으면 더미 사용)
+    static func create(userId: String, url: String, memo: String, category: String,
+                       fetchedTitle: String? = nil, fetchedSource: String? = nil) -> LinkItem {
         let lower = url.lowercased()
 
         var title = ""
@@ -67,7 +68,9 @@ struct LinkItem: Identifiable, Codable {
 
         } else {
             title = "아티클"
-            source = URL(string: url)?.host ?? "Unknown"
+            source = URL(string: url)?.host?
+                .replacingOccurrences(of: "www.", with: "")
+                .replacingOccurrences(of: "m.", with: "") ?? "Unknown"
             tags = ["아티클", "IT"]
             keyMessage = "최신 기술 동향과 인사이트를 담은 아티클입니다."
             mainPoints = [
@@ -78,12 +81,16 @@ struct LinkItem: Identifiable, Codable {
             insight = "테크 트렌드를 꾸준히 파악하는 것은 개발자 경쟁력의 핵심입니다. 아티클의 핵심 개념을 정리하고 현재 프로젝트에 적용할 수 있는 부분을 찾아보세요."
         }
 
+        // 실제로 fetch된 값 있으면 우선 사용
+        let finalTitle = (fetchedTitle != nil && !fetchedTitle!.isEmpty) ? fetchedTitle! : title
+        let finalSource = (fetchedSource != nil && !fetchedSource!.isEmpty) ? fetchedSource! : source
+
         return LinkItem(
             userId: userId,
             url: url,
             memo: memo,
-            title: title,
-            source: source,
+            title: finalTitle,
+            source: finalSource,
             category: category,
             tags: tags,
             isRead: false,
