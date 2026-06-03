@@ -188,7 +188,7 @@ struct HomeView: View {
                 .foregroundColor(.secondary.opacity(0.4))
             Text("저장된 링크가 없습니다")
                 .font(.headline).foregroundColor(.secondary)
-            Text("+ 버튼을 눌러 추가해보세요")
+            Text("+ 버튼을 눌러 추가해 보세요")
                 .font(.subheadline).foregroundColor(.secondary.opacity(0.6))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -32,18 +32,18 @@ struct SettingsView: View {
                     }
                 }
 
-                Section("정보") {
-                    HStack {
-                        Label("앱 버전", systemImage: "info.circle")
-                        Spacer()
-                        Text("1.0.0").foregroundColor(.secondary).font(.subheadline)
-                    }
-                    HStack {
-                        Label("개발자", systemImage: "hammer")
-                        Spacer()
-                        Text("김예나").foregroundColor(.secondary).font(.subheadline)
-                    }
-                }
+//                Section("정보") {
+//                    HStack {
+//                        Label("앱 버전", systemImage: "info.circle")
+//                        Spacer()
+//                        Text("1.0.0").foregroundColor(.secondary).font(.subheadline)
+//                    }
+//                    HStack {
+//                        Label("개발자", systemImage: "hammer")
+//                        Spacer()
+//                        Text("김예나").foregroundColor(.secondary).font(.subheadline)
+//                    }
+//                }
 
                 Section {
                     Button { showLogoutAlert = true } label: {

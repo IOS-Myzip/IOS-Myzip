@@ -45,9 +45,9 @@ struct OnboardingView: View {
                 }
 
                 VStack(spacing: 12) {
-                    Text("LinkDeck에 오신 것을\n환영합니다")
+                    Text("LinkDeck")
                         .font(.title.bold()).multilineTextAlignment(.center)
-                    Text("저장한 링크를 카드 뉴스로 빠르게 파악하고\n나만의 인사이트를 쌓아보세요")
+                    Text("저장한 링크를 카드 뉴스로 빠르게 파악하고\n나만의 인사이트를 쌓아 보세요")
                         .font(.subheadline).multilineTextAlignment(.center)
                         .foregroundColor(.secondary).lineSpacing(4)
                 }
