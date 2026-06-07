@@ -3,12 +3,14 @@ import FirebaseCore
 
 @main
 struct LinkDeckApp: App {
-    @StateObject private var authViewModel = AuthViewModel()
-    @StateObject private var categoryViewModel = CategoryViewModel()
+    @StateObject private var authViewModel: AuthViewModel
+    @StateObject private var categoryViewModel: CategoryViewModel
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
     init() {
-        FirebaseApp.configure()
+        FirebaseApp.configure() 
+        _authViewModel = StateObject(wrappedValue: AuthViewModel())
+        _categoryViewModel = StateObject(wrappedValue: CategoryViewModel())
     }
 
     var body: some Scene {

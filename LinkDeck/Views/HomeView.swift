@@ -8,7 +8,6 @@ struct HomeView: View {
 
     @State private var showAddLink = false
     @State private var selectedLink: LinkItem? = nil
-    @State private var editingLink: LinkItem? = nil
     @State private var sortNewest = true
     @State private var showUnreadOnly = false
 
@@ -57,12 +56,6 @@ struct HomeView: View {
             }
             .fullScreenCover(item: $selectedLink) { link in
                 CardViewerView(link: link, viewModel: viewModel)
-            }
-            .sheet(item: $editingLink) { link in
-                EditLinkView(link: link) { updated in
-                    await viewModel.updateLink(updated)
-                }
-                .environmentObject(categoryViewModel)
             }
             .task {
                 await viewModel.fetchLinks()
@@ -156,14 +149,6 @@ struct HomeView: View {
                 LinkRowView(link: link)
                     .contentShape(Rectangle())
                     .onTapGesture { selectedLink = link }
-                    .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                        Button {
-                            editingLink = link
-                        } label: {
-                            Label("수정", systemImage: "pencil")
-                        }
-                        .tint(Color.appTeal)
-                    }
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
                             Task { await viewModel.deleteLink(link) }

@@ -17,8 +17,6 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: 3) {
                             Text(authViewModel.currentUser?.email ?? "")
                                 .font(.subheadline.bold())
-                            Text("LinkDeck 사용자")
-                                .font(.caption).foregroundColor(.secondary)
                         }
                     }
                     .padding(.vertical, 6)
