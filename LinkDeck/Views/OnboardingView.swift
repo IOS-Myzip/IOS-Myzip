@@ -45,7 +45,7 @@ struct OnboardingView: View {
                 }
 
                 VStack(spacing: 12) {
-                    Text("LinkDeck")
+                    Text("my.zip")
                         .font(.title.bold()).multilineTextAlignment(.center)
                     Text("저장한 링크를 카드 뉴스로 빠르게 파악하고\n나만의 인사이트를 쌓아 보세요")
                         .font(.subheadline).multilineTextAlignment(.center)
@@ -224,7 +224,7 @@ struct OnboardingView: View {
                 hasSeenOnboarding = true
             }
         } label: {
-            Text(currentPage == 0 ? "시작하기 →" : currentPage == 1 ? "다음 →" : "LinkDeck 시작하기")
+            Text(currentPage == 0 ? "시작하기 →" : currentPage == 1 ? "다음 →" : "my.zip 시작하기")
                 .font(.body.bold())
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)

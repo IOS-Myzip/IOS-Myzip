@@ -23,7 +23,7 @@ struct LoginView: View {
                     Image(systemName: "rectangle.stack.fill")
                         .font(.system(size: 64))
                         .foregroundColor(.white)
-                    Text("LinkDeck")
+                    Text("my.zip")
                         .font(.largeTitle.bold())
                         .foregroundColor(.white)
                     Text("나만의 링크 큐레이션")
