@@ -32,3 +32,7 @@ Pods/
 
 # Firebase — 실제 키 파일은 커밋하지 않음
 LinkDeck/GoogleService-Info.plist
+
+# Xcode user/shared scheme data (auto-generated locally)
+LinkDeck.xcodeproj/xcuserdata/
+LinkDeck.xcodeproj/xcshareddata/xcschemes/
