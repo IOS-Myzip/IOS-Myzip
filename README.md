@@ -1,6 +1,6 @@
-# 🔗 LinkDeck
-
+# 🏠 my.zip
 저장하고 싶은 링크를 카드 뉴스 형태로 정리해서 볼 수 있는 iOS 링크 큐레이션 앱
+
 
 ![iOS](https://img.shields.io/badge/iOS-17%2B-000000?style=for-the-badge&logo=apple&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![SwiftUI](https://img.shields.io/badge/SwiftUI-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
@@ -18,6 +18,10 @@ URL 하나로 제목, 출처, 핵심 메시지를 자동으로 구성해 링크 
 카드 뷰어(커버 → 핵심 메시지 → 인사이트) 형식으로 콘텐츠를 단계적으로 소비
 읽음 상태 자동 추적 및 카테고리 분류로 링크 관리 효율화
 Firebase 동기화를 통해 기기가 바뀌어도 데이터 유지
+
+**1-3. 프로젝트 이름의 의미**
+
+나만의 링크를 압축해서 보관하는 공간이라는 의미를 담고 있다. zip은 압축 파일 포맷이기도 하지만, 발음하면 집(家)처럼 들리기도 해서 링크를 저장하고 언제든 꺼내 볼 수 있는 나만의 집이라는 이중적 의미를 의도한 것이다.
 
 <br>
 
@@ -83,6 +87,6 @@ Firebase 동기화를 통해 기기가 바뀌어도 데이터 유지
 ### 6. 실행 방법
 
 1. Firebase 프로젝트 생성 후 `GoogleService-Info.plist` 추가
-   - 템플릿: `LinkDeck/GoogleService-Info.plist.template` 참고
+   - 템플릿: `Myzip/GoogleService-Info.plist.template` 참고
 2. Firestore 복합 인덱스 생성 (`userId` + `createdAt` desc)
 3. Xcode에서 빌드 (iOS 17+)
