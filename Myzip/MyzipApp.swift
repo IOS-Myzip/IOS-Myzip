@@ -2,7 +2,7 @@ import SwiftUI
 import FirebaseCore
 
 @main
-struct LinkDeckApp: App {
+struct MyzipApp: App {
     @StateObject private var authViewModel: AuthViewModel
     @StateObject private var categoryViewModel: CategoryViewModel
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false

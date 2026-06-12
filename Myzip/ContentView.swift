@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  LinkDeck
+//  Myzip
 //
 //  Created by 김예나 on 5/24/26.
 //
