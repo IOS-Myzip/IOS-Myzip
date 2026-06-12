@@ -2,7 +2,7 @@
 
 저장하고 싶은 링크를 카드 뉴스 형태로 정리해서 볼 수 있는 iOS 링크 큐레이션 앱
 
-![iOS](https://img.shields.io/badge/iOS-17%2B-000000?style=flat&logo=apple&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=flat&logo=swift&logoColor=white) ![SwiftUI](https://img.shields.io/badge/SwiftUI-F54A2A?style=flat&logo=swift&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)
+![iOS](https://img.shields.io/badge/iOS-17%2B-000000?style=for-the-badge&logo=apple&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![SwiftUI](https://img.shields.io/badge/SwiftUI-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
 <br>
 
@@ -65,12 +65,12 @@ Firebase 동기화를 통해 기기가 바뀌어도 데이터 유지
 ### 4. 관련 기술
 | 분류 | 사용 기술 | 상세 |
 |---|---|---|
-| 언어 | ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=flat&logo=swift&logoColor=white) | Swift 5.9 |
-| UI | ![SwiftUI](https://img.shields.io/badge/SwiftUI-F05138?style=flat&logo=swift&logoColor=white) | iOS 17+ 전용 |
-| 인증 | ![Firebase Auth](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=flat&logo=firebase&logoColor=black) | 이메일·비밀번호 인증 |
-| DB | ![Firestore](https://img.shields.io/badge/Firestore-FFCA28?style=flat&logo=firebase&logoColor=black) | 링크 및 카테고리 저장, 복합 인덱스(`userId` + `createdAt` desc) |
-| 메타데이터 | ![Apple](https://img.shields.io/badge/LinkPresentation-000000?style=flat&logo=apple&logoColor=white) | `LPMetadataProvider`로 URL 제목 자동 fetch |
-| 아키텍처 | ![MVVM](https://img.shields.io/badge/MVVM-555555?style=flat) | View ↔ ViewModel ↔ Service 3계층 분리 |
+| 언어 | ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=for-the-badge&logo=swift&logoColor=white) | Swift 5.9 |
+| UI | ![SwiftUI](https://img.shields.io/badge/SwiftUI-F05138?style=for-the-badge&logo=swift&logoColor=white) | iOS 17+ 전용 |
+| 인증 | ![Firebase Auth](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) | 이메일·비밀번호 인증 |
+| DB | ![Firestore](https://img.shields.io/badge/Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) | 링크 및 카테고리 저장, 복합 인덱스(`userId` + `createdAt` desc) |
+| 메타데이터 | ![Apple](https://img.shields.io/badge/LinkPresentation-000000?style=for-the-badge&logo=apple&logoColor=white) | `LPMetadataProvider`로 URL 제목 자동 fetch |
+| 아키텍처 | ![MVVM](https://img.shields.io/badge/MVVM-555555?style=for-the-badge) | View ↔ ViewModel ↔ Service 3계층 분리 |
 
 <br>
 
