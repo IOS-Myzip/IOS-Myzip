@@ -1,7 +1,7 @@
 # 🏠 my.zip
 저장한 링크를 카드 형식으로 소비하는 iOS 링크 큐레이션 앱
 
-![iOS](https://img.shields.io/badge/iOS-17%2B-000000?style=for-the-badge&logo=apple&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![SwiftUI](https://img.shields.io/badge/SwiftUI-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![SwiftUI](https://img.shields.io/badge/SwiftUI-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
 <br>
 
@@ -68,7 +68,7 @@
 ### 4. 관련 기술
 | 분류 | 사용 기술 | 상세 |
 |---|---|---|
-| 언어 | ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=for-the-badge&logo=swift&logoColor=white) | Swift |
+| 언어 | ![Swift](https://img.shields.io/badge/Swift-F54A2A?style=for-the-badge&logo=swift&logoColor=white) | Swift |
 | UI | ![SwiftUI](https://img.shields.io/badge/SwiftUI-F05138?style=for-the-badge&logo=swift&logoColor=white) | iOS 전용 |
 | 인증 | ![Firebase Auth](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) | 이메일 / 비밀번호 인증 |
 | DB | ![Firestore](https://img.shields.io/badge/Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) | 링크 및 카테고리 저장, 복합 인덱스(`userId` + `createdAt` desc) |
