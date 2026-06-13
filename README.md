@@ -1,6 +1,5 @@
 # 🏠 my.zip
-저장하고 싶은 링크를 카드 뉴스 형태로 정리해서 볼 수 있는 iOS 링크 큐레이션 앱
-
+저장한 링크를 카드 형식으로 소비하는 iOS 링크 큐레이션 앱
 
 ![iOS](https://img.shields.io/badge/iOS-17%2B-000000?style=for-the-badge&logo=apple&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![SwiftUI](https://img.shields.io/badge/SwiftUI-F54A2A?style=for-the-badge&logo=swift&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
@@ -14,10 +13,10 @@
 
 **1-2. 프로젝트 목표**
 
-URL 하나로 제목, 출처, 핵심 메시지를 자동으로 구성해 링크 저장 마찰을 최소화
-카드 뷰어(커버 → 핵심 메시지 → 인사이트) 형식으로 콘텐츠를 단계적으로 소비
-읽음 상태 자동 추적 및 카테고리 분류로 링크 관리 효율화
-Firebase 동기화를 통해 기기가 바뀌어도 데이터 유지
+- URL 하나로 제목, 출처, 핵심 메시지를 자동으로 구성해 링크 저장 마찰을 최소화
+- 카드 뷰어(커버 → 핵심 메시지 → 인사이트) 형식으로 콘텐츠를 단계적으로 소비
+- 읽음 상태 자동 추적 및 카테고리 분류로 링크 관리 효율화
+- Firebase 동기화를 통해 기기가 바뀌어도 데이터 유지
 
 **1-3. 프로젝트 이름의 의미**
 
@@ -55,7 +54,7 @@ Firebase 동기화를 통해 기기가 바뀌어도 데이터 유지
 
 <br>
 
-###  3. 기대효과
+### 3. 기대효과
 | 항목 | 내용 |
 |---|---|
 | 링크 저장 효율화 | URL 하나만 입력하면 제목·출처·카드 내용이 자동 생성되어 저장 시간 단축 |
@@ -69,9 +68,9 @@ Firebase 동기화를 통해 기기가 바뀌어도 데이터 유지
 ### 4. 관련 기술
 | 분류 | 사용 기술 | 상세 |
 |---|---|---|
-| 언어 | ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=for-the-badge&logo=swift&logoColor=white) | Swift 5.9 |
-| UI | ![SwiftUI](https://img.shields.io/badge/SwiftUI-F05138?style=for-the-badge&logo=swift&logoColor=white) | iOS 17+ 전용 |
-| 인증 | ![Firebase Auth](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) | 이메일·비밀번호 인증 |
+| 언어 | ![Swift](https://img.shields.io/badge/Swift-5.9-F54A2A?style=for-the-badge&logo=swift&logoColor=white) | Swift |
+| UI | ![SwiftUI](https://img.shields.io/badge/SwiftUI-F05138?style=for-the-badge&logo=swift&logoColor=white) | iOS 전용 |
+| 인증 | ![Firebase Auth](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) | 이메일 / 비밀번호 인증 |
 | DB | ![Firestore](https://img.shields.io/badge/Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) | 링크 및 카테고리 저장, 복합 인덱스(`userId` + `createdAt` desc) |
 | 메타데이터 | ![Apple](https://img.shields.io/badge/LinkPresentation-000000?style=for-the-badge&logo=apple&logoColor=white) | `LPMetadataProvider`로 URL 제목 자동 fetch |
 | 아키텍처 | ![MVVM](https://img.shields.io/badge/MVVM-555555?style=for-the-badge) | View ↔ ViewModel ↔ Service 3계층 분리 |
@@ -85,8 +84,13 @@ Firebase 동기화를 통해 기기가 바뀌어도 데이터 유지
 <br>
 
 ### 6. 실행 방법
+1. 클론 후 XCode에서 `Myzip.xcodeproj` 실행
+2. Firebase 콘솔에서 프로젝트 생성 → `GoogleService-Info.plist`를 `Myzip/` 폴더에 추가
+3. 이후 원하는 시뮬레이터를 선택해 실행
 
-1. Firebase 프로젝트 생성 후 `GoogleService-Info.plist` 추가
-   - 템플릿: `Myzip/GoogleService-Info.plist.template` 참고
-2. Firestore 복합 인덱스 생성 (`userId` + `createdAt` desc)
-3. Xcode에서 빌드 (iOS 17+)
+<br>
+
+### 7. 시연 영상
+<a href="https://youtu.be/sp0pa094zkY">
+  <img width="500" alt="5" src="https://github.com/user-attachments/assets/7233876f-1cc1-4015-856c-40b08010b6b9" />
+</a>
