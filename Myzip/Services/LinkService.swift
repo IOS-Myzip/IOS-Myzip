@@ -12,10 +12,11 @@ class LinkService {
     func fetchLinks(userId: String) async throws -> [LinkItem] {
         let snapshot = try await db.collection("links")
             .whereField("userId", isEqualTo: userId)
-            .order(by: "createdAt", descending: true)
             .getDocuments()
 
-        return snapshot.documents.compactMap { try? $0.data(as: LinkItem.self) }
+        return snapshot.documents
+            .compactMap { try? $0.data(as: LinkItem.self) }
+            .sorted { $0.createdAt.dateValue() > $1.createdAt.dateValue() }
     }
 
     func deleteLink(_ link: LinkItem) async throws {
