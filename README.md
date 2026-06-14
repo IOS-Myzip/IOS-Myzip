@@ -108,5 +108,5 @@
 
 ### 8. 시연 영상
 <a href="https://youtu.be/sp0pa094zkY">
-  <img width="600" alt="5" src="https://github.com/user-attachments/assets/e1782374-e04a-492f-b87e-8dc024efaa5a" />
+  <img width="600" alt="5" src="https://github.com/user-attachments/assets/2bbd773f-6652-473c-82a3-413946dd58f8" />
 </a>
